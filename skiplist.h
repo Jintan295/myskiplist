@@ -1,6 +1,3 @@
-/******************
-  Author :   wangyifan
-****************/
 
 
 #include <iostream>
