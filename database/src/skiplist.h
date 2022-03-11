@@ -7,7 +7,7 @@
 #include <fstream>
 #include <cmath>
 
-# define STORE_FILE "store/dumpFile"
+# define STORE_FILE "data.txt"
 
 std::string delimiter = ":";
 std::mutex mtx;
@@ -91,7 +91,7 @@ Node<K, V>* SkipList<K, V>::create_node(const K k, const V v,int level){
 
 template<typename K, typename V>
 bool SkipList<K, V>::insert_element(const K key, const V value){
-    mtx.lock();
+    //mtx.lock();
     Node<K, V> * current = this->_header;
 
     Node<K, V> *update[_max_level + 1];
@@ -105,10 +105,10 @@ bool SkipList<K, V>::insert_element(const K key, const V value){
     current = current->forward[0];
 
     if(current != NULL && current->get_key() == key){
-        mtx.unlock();
+        //mtx.unlock();
         return false;
     }
-
+    mtx.lock();
     if(current == NULL || current->get_key() != key){
         int random_level = get_random_level();
         if(random_level > _skip_list_level){
@@ -155,7 +155,7 @@ int SkipList<K, V>::size(){
 }
 template<typename K, typename V>
 bool SkipList<K, V>::delete_element(K key){
-    mtx.lock();
+    //mtx.lock();
     Node<K, V> *current = this->_header;
     Node<K, V> *update[_max_level+1];
     memset(update, 0, sizeof(Node<K, V>*)*(_max_level + 1));
@@ -166,6 +166,7 @@ bool SkipList<K, V>::delete_element(K key){
         update[i] = current;
     }
     current = current->forward[0];
+    mtx.lock();
     if (current != NULL && current->get_key() == key){
         for(int i = 0; i<= _skip_list_level; i++){
             if(update[i]->forward[i] != current)
@@ -237,7 +238,6 @@ int SkipList<K,V>::get_random_level(){
 template<typename K, typename V>
 
 void SkipList<K, V>::dump_file(){
-    std::cout << "dump_file-----------" << std::endl;
     _file_writer.open(STORE_FILE);
     Node<K, V>* node = this->_header->forward[0];
 
@@ -256,7 +256,6 @@ template<typename K, typename V>
 void SkipList<K, V>::load_file(){
 
     _file_reader.open(STORE_FILE);
-    std::cout << "load_file--------------" << std::endl;
     std::string line;
     std::string * key = new std::string();
     std::string * value = new std::string();
