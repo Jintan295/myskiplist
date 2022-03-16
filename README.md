@@ -30,7 +30,7 @@
 
 ## 图形化（出自Redis设计与实现）
 
-![image-20220316102809504](C:\Users\wangyifan\AppData\Roaming\Typora\typora-user-images\image-20220316102809504.png)
+![image](image.png)
 
 
 
